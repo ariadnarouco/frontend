@@ -1,5 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+# Yarn
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -66,3 +68,56 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `yarn build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+
+# Docker
+
+## Build Dockerfile.dev
+docker build . -f Dockerfile.dev
+
+## Run container
+docker run -it -p 3000:3000 2f613e0825ef
+
+## Run container while making changes
+This command is escencially doing the following:
+1. Defining that we are going to run a docker image: -> `docker run`
+2. We are going to run this image with an input terminal, meaning that a bash command liner will be attached to the container -> `-it`
+3. We are redirecting the internal container traffic published in 3000 to be exposed outside the container in the same port, 3000. This allows us to be able to query http://localhost:3000 and access our application OUTSIDE_PORT:INSIDE_PORT -> `-p 3000:3000`. 
+4. We are defining a volume for the container where our dependecies live. Since in the Dockerfile.dev we specifed to install all dependencies, we will have, in our container, a folder with our dependencies -> `v /app/node_modules`
+5. We are defining a volume with a references to our local application source code. This will allow us to make changes on the go without having to rebuild and restart the container. Note that we see the changes on the go because React recognices a change in the file and refreshes -> `-v $(pwd):/app`
+6. Last but not least, we need to specify the image that we want to run which is the output of running docker build -> `docker build . -f Dockerfile.dev`
+
+docker run -it -p 3000:3000 -v /app/node_modules -v $(pwd):/app 2f613e0825ef
+
+
+## Option one to run your tests on the container
+### Run tests within the container after building your image
+
+```
+$ docker build . -f Dockerfile.dev
+$ docker run -it a77914eb4ee8 npm run test
+```
+
+### Run tests while running your container on detached mode
+```
+$ docker-compose up
+$ docker ps
+$ docker exec -it cb3cb2011673 npm run test
+```
+## Option two to run your tests on the container
+
+Add a service (which is going to be as the first container only for test purposes) in your docker-compose to test your app 
+
+```
+tests:
+    build:
+        context: .
+        dockerfile: Dockerfile.dev
+    volumes: 
+        - /app/node_modules
+        - .:/app
+    command: ["npm", "run", "test"]
+
+```
+
+<small>_This will just show you the output of the test but you cannot have the interative terminal. If you need the interaction terminal, do not use this approach._</small>
