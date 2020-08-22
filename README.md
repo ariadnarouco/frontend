@@ -128,7 +128,7 @@ tests:
 
 We've added a travis configuration file (.travis.yml). 
 
-This file has the configuration to build and run our application. 
+This file has the configuration to build and run our application.
 
 Then, we also run out test suite. 
 
