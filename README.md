@@ -121,3 +121,17 @@ tests:
 ```
 
 <small>_This will just show you the output of the test but you cannot have the interative terminal. If you need the interaction terminal, do not use this approach._</small>
+
+
+
+## Travis
+
+We've added a travis configuration file (.travis.yml). 
+
+This file has the configuration to build and run our application. 
+
+Then, we also run out test suite. 
+
+Keep in mind that you need to enable your repository in https://travis-ci.com/
+
+After every commit, your a travis build will be triggered. 

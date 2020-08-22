@@ -1,0 +1,12 @@
+sudo: required
+services:
+    - docker
+
+script:
+    - docker run -e CI=true ariadnarouco/react-front npm run test
+
+before_install:
+    - docker build -t ariadnarouco/react-front -f Dockerfile.dev .
+
+script:
+    - docker run ariadnarouco/react-front npm run test -- --coverage
