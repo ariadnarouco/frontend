@@ -7,3 +7,6 @@ services:
 
 before_install:
     - docker build -t ariadnarouco/react-front -f Dockerfile.dev .
+
+script:
+    - docker run -e CI=true ariadnarouco/react-front npm run test
