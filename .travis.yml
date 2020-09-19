@@ -1,12 +1,9 @@
 sudo: required
-
-language: node_js
-
 services:
-    - docker
+  - docker
 
 before_install:
-    - docker build -t ariadnarouco/react-front -f Dockerfile.dev .
+  - docker build -t stephengrider/docker-react -f Dockerfile.dev .
 
 script:
-    - docker run -e CI=true ariadnarouco/react-front npm run test
+  - docker run stephengrider/docker-react npm run test -- --coverage
